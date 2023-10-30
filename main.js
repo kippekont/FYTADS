@@ -1,20 +1,19 @@
-console.log("Fuck YT ads");
 let URL = window.location.href;
 let counter = 0;
-let URLChangeInterval = setInterval(onURLChanged, 100);
+let URLChangeInterval = setInterval(isURLChanged, 100);
 let adBlockErrorLoadedInterval = null;
 
 if(window.location.hostname == "www.youtube.com" && window.location.pathname == "/watch")
 {
-	adBlockErrorLoadedInterval = setInterval(onAdBlockErrorLoaded, 1000);
+	adBlockErrorLoadedInterval = setInterval(isAdBlockErrorLoaded, 1000);
 }
 
 function showEmbeddedVideo()
 {
+	console.log("Fuck YT ads");
 	disableCache();
 	const newDiv = document.createElement("div");
 	newDiv.style.zIndex = 100;
-	newDiv.style.position = "fixed";
 
 	newDiv.style.backgroundColor = "#000"
 	const iframe = document.createElement("iframe");
@@ -38,7 +37,7 @@ function showEmbeddedVideo()
 	win.document.body.innerHTML = newDiv.outerHTML;
 }
 
-function onURLChanged()
+function isURLChanged()
 {
 	if(URL != window.location)
 	{
@@ -46,7 +45,7 @@ function onURLChanged()
 		if(window.location.hostname == "www.youtube.com" && window.location.pathname == "/watch")
 		{
 			let divs = document.getElementsByTagName("ytd-enforcement-message-view-model");
-			adBlockErrorLoadedInterval = setInterval(onAdBlockErrorLoaded, 1000);
+			adBlockErrorLoadedInterval = setInterval(isAdBlockErrorLoaded, 1000);
 		}
 		else if(window.location.hostname == "www.youtube.com" && !window.location.pathname.includes("/shorts")){
 			window.location.reload();
@@ -54,13 +53,11 @@ function onURLChanged()
 	}
 }
 
-function onAdBlockErrorLoaded()
+function isAdBlockErrorLoaded()
 {
 	let divs = document.getElementsByTagName("ytd-enforcement-message-view-model");
-	console.log(adBlockErrorLoadedInterval);
 	if(divs.length != 0)
 	{
-		console.log("test");
 		clearInterval(adBlockErrorLoadedInterval);
 		showEmbeddedVideo();
 	}
